@@ -11,7 +11,7 @@ npm start
 
 Open `http://127.0.0.1:3000`. New users can register at `/register`, sign in at `/login`, and complete their saved report at `/report`. The separate owner sign-in and dashboard are at `/owner`.
 
-The owner setup command prompts for an email and password, then saves the email and a salted password hash in `data/owner.json`. The readable password is never written to that file. Keep the data directory private and out of source control.
+The owner setup command prompts for an email and password, then saves the email and a salted password hash in `data/owner.json`. The readable password is never written to that file. The empty `data/` directory is included, but its contents remain excluded from source control.
 
 The owner credentials file can contain multiple owner accounts in its `owners` array. Owners can sign in with an email or username in `/owner`.
 
