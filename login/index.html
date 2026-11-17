@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#a91620">
+  <title>Log in — ReadyResponse</title>
+  <style>
+    :root { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #20232a; background: #f7f7f8; font-synthesis: none; }
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; display: grid; grid-template-rows: auto 1fr auto; }
+    a { color: inherit; }
+    .topbar { height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 max(22px, calc((100% - 1080px) / 2)); background: #fff; border-bottom: 1px solid #e5e7eb; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-size: 18px; font-weight: 800; letter-spacing: -.04em; }
+    .mark { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 11px; color: #fff; background: #ad1822; font-size: 23px; }
+    .brand span:last-child span { color: #ad1822; }
+    .back { color: #626873; font-size: 13px; font-weight: 600; text-decoration: none; }
+    .back:hover { color: #ad1822; }
+    main { display: grid; place-items: center; padding: 42px 18px; }
+    .card { width: min(430px, 100%); padding: 34px; background: #fff; border: 1px solid #e6e1e2; border-radius: 14px; box-shadow: 0 16px 42px rgba(32,24,25,.07); }
+    .icon { display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: 22px; border-radius: 12px; color: #ad1822; background: #fff1f1; font-size: 21px; }
+    h1 { margin: 0; font-size: 28px; letter-spacing: -.04em; }
+    .subtitle { margin: 9px 0 25px; color: #656b75; font-size: 14px; line-height: 1.6; }
+    label { display: block; margin: 15px 0 7px; color: #363a42; font-size: 12px; font-weight: 700; }
+    input { width: 100%; height: 44px; padding: 0 12px; border: 1px solid #dfe1e5; border-radius: 7px; color: #20232a; font: inherit; font-size: 13px; }
+    input:focus { outline: none; border-color: #cb555d; box-shadow: 0 0 0 3px rgba(173,24,34,.1); }
+    .submit { width: 100%; min-height: 46px; margin-top: 22px; border: 0; border-radius: 8px; color: #fff; background: #ad1822; font: inherit; font-size: 14px; font-weight: 750; cursor: pointer; }
+    .submit:hover { background: #84111a; }
+    .status { min-height: 20px; margin: 13px 0 0; color: #84111a; font-size: 12px; line-height: 1.5; }
+    .note { margin: 17px 0 0; padding: 11px 12px; border-radius: 7px; color: #626873; background: #f7f7f8; font-size: 11px; line-height: 1.55; }
+    .create { margin: 22px 0 0; color: #656b75; text-align: center; font-size: 13px; }
+    .create a { color: #ad1822; font-weight: 700; text-decoration: none; }
+    footer { padding: 20px; color: #747984; background: #fff; border-top: 1px solid #e5e7eb; text-align: center; font-size: 12px; }
+    @media (max-width: 480px) { .card { padding: 26px 22px; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="../" aria-label="ReadyResponse home"><span class="mark" aria-hidden="true">+</span><span>Ready<span>Response</span></span></a>
+    <a class="back" href="../">Back to home</a>
+  </header>
+  <main>
+    <section class="card" aria-labelledby="login-title">
+      <div class="icon" aria-hidden="true">↗</div>
+      <h1 id="login-title">Welcome back</h1>
+      <p class="subtitle">Log in, then choose Create your patient report from the home page.</p>
+      <form id="login-form">
+        <label for="email">Email address</label>
+        <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+        <button class="submit" type="submit">Log in</button>
+        <p class="status" id="login-status" role="status" aria-live="polite"></p>
+      </form>
+      <p class="note">Your password is securely hashed by the server and is never stored as plain text.</p>
+      <p class="create">New here? <a href="../register/">Create an account</a></p>
+    </section>
+  </main>
+  <footer>ReadyResponse · Your health information deserves care.</footer>
+  <script src="../app.js" defer></script>
+</body>
+</html>

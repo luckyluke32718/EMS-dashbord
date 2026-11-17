@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#a91620">
+  <meta name="description" content="Create a patient medical information report to keep accessible when it matters.">
+  <title>ReadyResponse — Patient Report</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --red: #ad1822;
+      --red-dark: #84111a;
+      --red-pale: #fff1f1;
+      --ink: #20232a;
+      --muted: #656b75;
+      --line: #e5e7eb;
+      --paper: #fff;
+      --canvas: #f7f7f8;
+      --green: #23734b;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--canvas); }
+    a { color: inherit; }
+    button, input, select, textarea { font: inherit; }
+
+    .topbar {
+      height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 0 max(24px, calc((100% - 1120px) / 2));
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; font-weight: 800; letter-spacing: -.04em; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      color: #fff;
+      background: var(--red);
+      border-radius: 12px;
+    }
+    .brand-mark svg { width: 23px; height: 23px; }
+    .brand-name { font-size: 19px; }
+    .brand-name span { color: var(--red); }
+    .nav-links { display: flex; align-items: center; gap: 29px; font-size: 14px; font-weight: 600; }
+    .nav-links a { text-decoration: none; color: #505560; }
+    .nav-links a:hover { color: var(--red); }
+    .nav-cta { padding: 10px 16px; border: 1px solid #e8bfc2; border-radius: 9px; color: var(--red) !important; }
+    .nav-logout { padding: 9px 13px; border: 1px solid #e1e3e7; border-radius: 8px; color: #505560; background: #fff; font-weight: 650; cursor: pointer; }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 74px 24px 80px;
+      color: #fff;
+      background:
+        radial-gradient(ellipse at 82% 18%, rgba(255,255,255,.13), transparent 30%),
+        linear-gradient(120deg, #97131d 0%, #b51c27 54%, #8e111b 100%);
+    }
+    .hero::after {
+      content: "+";
+      position: absolute;
+      right: max(4%, calc((100% - 1180px) / 2));
+      top: 8px;
+      color: rgba(255,255,255,.065);
+      font-size: 360px;
+      line-height: 1;
+      font-weight: 300;
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; z-index: 1; width: min(1120px, 100%); margin: 0 auto; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 20px; font-size: 12px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; color: #ffe4e5; }
+    .eyebrow::before { content: ""; width: 22px; height: 2px; background: #ffb9bd; }
+    h1 { max-width: 700px; margin: 0; font-size: clamp(42px, 6vw, 68px); line-height: 1.03; letter-spacing: -.055em; }
+    .hero-copy { max-width: 575px; margin: 20px 0 30px; color: #f7dfe0; font-size: 17px; line-height: 1.7; }
+    .hero-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      gap: 9px;
+      padding: 0 19px;
+      border: 0;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 750;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background .18s ease, transform .18s ease, box-shadow .18s ease;
+    }
+    .button:hover { transform: translateY(-1px); }
+    .button-light { color: var(--red-dark); background: #fff; box-shadow: 0 6px 18px rgba(67, 4, 10, .15); }
+    .button-light:hover { background: #fff4f4; }
+    .button-red { color: #fff; background: var(--red); }
+    .button-red:hover { background: var(--red-dark); }
+    .button-outline { border: 1px solid #d5d8de; background: #fff; color: #30343b; }
+    .button-outline:hover { background: #f9fafb; }
+    .hero-note { display: inline-flex; align-items: center; gap: 7px; color: #f7dfe0; font-size: 13px; }
+
+    .trust-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 38px; padding: 21px 24px; background: #fff; border-bottom: 1px solid var(--line); }
+    .trust-item { display: flex; align-items: center; gap: 9px; color: #4f555f; font-size: 13px; font-weight: 600; }
+    .trust-item svg { width: 18px; height: 18px; color: var(--green); }
+
+    main { padding: 70px 24px 90px; }
+    .content { width: min(960px, 100%); margin: 0 auto; }
+    .section-heading { text-align: center; margin-bottom: 31px; }
+    .section-heading .eyebrow { color: var(--red); margin-bottom: 10px; }
+    .section-heading .eyebrow::before { background: var(--red); }
+    h2 { margin: 0; font-size: clamp(27px, 4vw, 36px); letter-spacing: -.04em; }
+    .section-heading p { max-width: 570px; margin: 12px auto 0; color: var(--muted); line-height: 1.65; font-size: 15px; }
+
+    .form-card { overflow: hidden; background: var(--paper); border: 1px solid #e6e1e2; border-radius: 14px; box-shadow: 0 16px 42px rgba(32, 24, 25, .07); }
+    .form-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 23px 27px; border-bottom: 1px solid var(--line); }
+    .form-heading h3 { margin: 0; font-size: 18px; letter-spacing: -.02em; }
+    .form-heading p { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
+    .form-tag { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; padding: 7px 10px; border-radius: 20px; color: #476254; background: #eef7f1; font-size: 11px; font-weight: 700; }
+    .form-body { padding: 25px 27px 28px; }
+    .form-section { margin: 0 0 24px; padding: 0 0 23px; border: 0; border-bottom: 1px solid var(--line); }
+    .form-section:last-of-type { margin-bottom: 20px; }
+    .section-title { display: flex; align-items: center; gap: 9px; margin: 0 0 16px; font-size: 14px; font-weight: 800; }
+    .section-icon { display: grid; place-items: center; width: 29px; height: 29px; flex: 0 0 auto; border-radius: 8px; color: var(--red); background: var(--red-pale); }
+    .section-icon svg { width: 16px; height: 16px; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px 18px; }
+    .grid-three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .field { min-width: 0; }
+    .field-wide { grid-column: 1 / -1; }
+    label, .field-label { display: block; margin-bottom: 7px; color: #363a42; font-size: 12px; font-weight: 700; }
+    .optional { color: #8a9099; font-weight: 500; }
+    input, select, textarea {
+      width: 100%;
+      min-height: 42px;
+      padding: 10px 12px;
+      color: var(--ink);
+      background: #fff;
+      border: 1px solid #dfe1e5;
+      border-radius: 7px;
+      outline: none;
+      font-size: 13px;
+    }
+    textarea { min-height: 83px; resize: vertical; line-height: 1.5; }
+    input:focus, select:focus, textarea:focus { border-color: #cb555d; box-shadow: 0 0 0 3px rgba(173, 24, 34, .1); }
+    input::placeholder, textarea::placeholder { color: #a1a5ac; }
+    .choice-list { display: flex; flex-wrap: wrap; gap: 10px; }
+    .choice {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 11px;
+      border: 1px solid #e1e3e7;
+      border-radius: 7px;
+      color: #4a4e56;
+      background: #fff;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .choice:has(input:checked) { border-color: #d98b90; color: var(--red-dark); background: #fff7f7; }
+    .choice input { width: 14px; min-height: 14px; height: 14px; margin: 0; accent-color: var(--red); }
+    .form-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; }
+    .form-footnote { margin: 17px 0 0; color: #777d87; font-size: 11px; line-height: 1.5; text-align: center; }
+    .form-footnote strong { color: #525862; }
+    .footer { padding: 25px 24px; color: #747984; background: #fff; border-top: 1px solid var(--line); text-align: center; font-size: 12px; }
+    .footer strong { color: #353942; }
+    .status { min-height: 20px; margin: 12px 0 0; color: var(--green); font-size: 13px; text-align: right; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+    @media (max-width: 700px) {
+      .topbar { height: 64px; padding: 0 18px; }
+      .nav-links { gap: 13px; }
+      .nav-links a:not(.nav-cta) { display: none; }
+      .nav-cta { padding: 9px 11px; font-size: 12px; }
+      .hero { padding: 58px 22px 62px; }
+      .hero-copy { font-size: 15px; }
+      .trust-row { justify-content: flex-start; gap: 14px 22px; padding: 18px 22px; }
+      .trust-item { font-size: 12px; }
+      main { padding: 51px 15px 62px; }
+      .form-heading { align-items: flex-start; padding: 19px 18px; }
+      .form-body { padding: 21px 18px 23px; }
+      .form-tag { font-size: 10px; }
+      .grid-three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 460px) {
+      .brand-name { font-size: 17px; }
+      .brand-mark { width: 34px; height: 34px; }
+      .hero { padding-top: 48px; }
+      .hero-note { flex-basis: 100%; }
+      .form-heading { display: block; }
+      .form-tag { margin-top: 12px; }
+      .grid, .grid-three { grid-template-columns: 1fr; }
+      .field-wide { grid-column: auto; }
+      .form-actions .button { flex: 1 1 100%; }
+    }
+    @media print {
+      @page { margin: 12mm; }
+      body { background: #fff; }
+      .topbar, .hero, .trust-row, .section-heading, .form-heading, .form-actions, .form-footnote, .footer { display: none !important; }
+      main { padding: 0; }
+      .content { width: 100%; }
+      .form-card { border: 0; border-radius: 0; box-shadow: none; }
+      .form-body { padding: 0; }
+      .form-section { break-inside: avoid; margin-bottom: 12px; padding-bottom: 12px; }
+      input, select, textarea { border-color: #aaa; color: #111; }
+      .section-icon { print-color-adjust: exact; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="../" aria-label="ReadyResponse home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18"/><path d="M7.5 7.5h9v9h-9z"/></svg>
+      </span>
+      <span class="brand-name">Ready<span>Response</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <button class="nav-logout" type="button" id="logout-button">Log out</button>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Be ready when every second counts</p>
+      <h1>Help responders help you.</h1>
+      <p class="hero-copy">Keep your essential medical information in one clear, easy-to-share report. Add what matters, then print a copy for your wallet, home, or emergency kit.</p>
+      <div class="hero-actions">
+        <a class="button button-light" id="new-report-link" href="#report">
+          Create your patient report
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <span class="hero-note">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg>
+          Your report is saved privately to your account
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <div class="trust-row" id="how-it-works" aria-label="How this report works">
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg>
+      Private by design
+    </div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></svg>
+      Simple to complete
+    </div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+      Ready to print
+    </div>
+  </div>
+
+  <main>
+    <div class="content">
+      <div class="section-heading">
+        <p class="eyebrow">Patient emergency information</p>
+        <h2>A little preparation goes a long way.</h2>
+        <p>Fill in the details you want first responders and people you trust to know. You can leave any field blank and update or print your report whenever you need.</p>
+      </div>
+
+      <section class="form-card" id="report" aria-labelledby="report-title">
+        <div class="form-heading">
+          <div>
+            <h3 id="report-title">Patient Emergency Medical Report</h3>
+          </div>
+          <span class="form-tag">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Saved to your account
+          </span>
+        </div>
+
+        <form class="form-body" id="ems-form">
+          <fieldset class="form-section">
+            <legend class="sr-only">Patient information</legend>
+            <h4 class="section-title"><span class="section-icon" aria-hidden="true">01</span> Patient information</h4>
+            <div class="grid">
+              <div class="field"><label for="full-name">Full name</label><input id="full-name" name="fullName" autocomplete="name" placeholder="First and last name"></div>
+              <div class="field"><label for="birth-date">Date of birth</label><input id="birth-date" name="birthDate" type="date" autocomplete="bday"></div>
+              <div class="field"><label for="phone">Phone number <span class="optional">(optional)</span></label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="(555) 555-0123"></div>
+              <div class="field"><label for="blood-type">Blood type <span class="optional">(if known)</span></label>
+                <select id="blood-type" name="bloodType"><option value="">Select blood type</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option><option>Unknown</option></select>
+              </div>
+              <div class="field"><label for="height">Height <span class="optional">(optional)</span></label><input id="height" name="height" placeholder="e.g. 5 ft 8 in"></div>
+              <div class="field"><label for="weight">Weight <span class="optional">(optional)</span></label><input id="weight" name="weight" placeholder="e.g. 150 lb"></div>
+              <div class="field field-wide"><label for="address">Home address <span class="optional">(optional)</span></label><input id="address" name="address" autocomplete="street-address" placeholder="Street, city, state, ZIP"></div>
+              <div class="field"><label for="language">Primary language <span class="optional">(optional)</span></label><input id="language" name="language" placeholder="e.g. English"></div>
+              <div class="field"><label for="physician">Primary care physician <span class="optional">(optional)</span></label><input id="physician" name="physician" placeholder="Name and phone"></div>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend class="sr-only">Medical conditions</legend>
+            <h4 class="section-title"><span class="section-icon" aria-hidden="true">02</span> Medical conditions</h4>
+            <div class="choice-list">
+              <label class="choice"><input type="checkbox" name="conditions" value="Diabetes">Diabetes</label>
+              <label class="choice"><input type="checkbox" name="conditions" value="Heart condition">Heart condition</label>
+              <label class="choice"><input type="checkbox" name="conditions" value="High blood pressure">High blood pressure</label>
+              <label class="choice"><input type="checkbox" name="conditions" value="Asthma or COPD">Asthma or COPD</label>
+              <label class="choice"><input type="checkbox" name="conditions" value="Seizures">Seizures</label>
+              <label class="choice"><input type="checkbox" name="conditions" value="Other condition">Other</label>
+            </div>
+            <div class="grid" style="margin-top:15px">
+              <div class="field field-wide"><label for="condition-notes">Other conditions or important details</label><textarea id="condition-notes" name="conditionNotes" placeholder="Include anything else a responder should know"></textarea></div>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend class="sr-only">Medications and allergies</legend>
+            <h4 class="section-title"><span class="section-icon" aria-hidden="true">03</span> Medications &amp; allergies</h4>
+            <div class="grid">
+              <div class="field"><label for="medications">Current medications</label><textarea id="medications" name="medications" placeholder="Include dosage and how often they take each"></textarea></div>
+              <div class="field"><label for="allergies">Allergies</label><textarea id="allergies" name="allergies" placeholder="List medication, food, or other allergies — or write “None known”"></textarea></div>
+              <div class="field"><label for="pharmacy">Pharmacy <span class="optional">(optional)</span></label><input id="pharmacy" name="pharmacy" placeholder="Name and phone"></div>
+              <div class="field"><label for="insurance">Insurance <span class="optional">(optional)</span></label><input id="insurance" name="insurance" placeholder="Company and member ID"></div>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend class="sr-only">Emergency contact</legend>
+            <h4 class="section-title"><span class="section-icon" aria-hidden="true">04</span> Emergency contact</h4>
+            <div class="grid grid-three">
+              <div class="field"><label for="contact-name">Contact name</label><input id="contact-name" name="contactName" autocomplete="name" placeholder="First and last name"></div>
+              <div class="field"><label for="contact-relationship">Relationship</label><input id="contact-relationship" name="contactRelationship" placeholder="e.g. Spouse"></div>
+              <div class="field"><label for="contact-phone">Phone number</label><input id="contact-phone" name="contactPhone" type="tel" autocomplete="tel" placeholder="(555) 555-0123"></div>
+              <div class="field field-wide"><label for="instructions">Special instructions <span class="optional">(optional)</span></label><textarea id="instructions" name="instructions" placeholder="Communication needs, medical devices, or other instructions"></textarea></div>
+            </div>
+          </fieldset>
+
+          <div class="form-actions">
+            <button class="button button-outline" id="clear-form" type="reset">New report</button>
+            <button class="button button-red" type="submit" id="save-report">Save report</button>
+          </div>
+          <p class="status" id="form-status" role="status" aria-live="polite"></p>
+          <p class="form-footnote"><strong>Important:</strong> This report is for informational purposes and is not a substitute for professional medical care. In an emergency, call your local emergency number.</p>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer"><strong>ReadyResponse</strong> · Keep your information updated and accessible.</footer>
+
+  <script src="../app.js" defer></script>
+</body>
+</html>

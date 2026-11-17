@@ -1,0 +1,10 @@
+{
+  "name": "readyresponse",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "setup-owner": "node setup-owner.js",
+    "test": "node --test"
+  }
+}
